@@ -13,3 +13,12 @@ Este projeto implementa uma aplicação OpenGL que permite ao usuário criar tri
 - `Vivencial1.cpp`: Código-fonte principal
 
 - ![alt text](images/image.png)
+
+# Atividade vivencial 2:
+- Gabriel Figueiredo, Conrado Maia
+
+
+## Entrega
+
+- `Vivencial2.cpp`: Código-fonte principal
+
