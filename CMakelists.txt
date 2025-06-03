@@ -45,6 +45,9 @@ include_directories(${glm_SOURCE_DIR})
 # Lista de exemplos/exercícios podem ser colocados aqui também
 set(EXERCISES
     EntregasVivenciais/Vivencial1
+    Modulo2/Ex1Parte1M2
+    Modulo3/M3JogoCores.cpp
+    Modulo4/Sprite.cpp
 )
 
 add_compile_options(-Wno-pragmas)
