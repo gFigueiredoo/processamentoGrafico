@@ -44,10 +44,7 @@ include_directories(${glm_SOURCE_DIR})
 
 # Lista de exemplos/exercícios podem ser colocados aqui também
 set(EXERCISES
-    EntregasVivenciais/Vivencial1
-    Modulo2/Ex1Parte1M2
-    Modulo3/M3JogoCores.cpp
-    Modulo4/Sprite.cpp
+    EntregasVivenciais/vivencialm4/Vivencial2
 )
 
 add_compile_options(-Wno-pragmas)
@@ -65,6 +62,9 @@ endif()
 
 # Caminho esperado para a GLAD
 set(GLAD_C_FILE "${CMAKE_SOURCE_DIR}/common/glad.c")
+set(MATHS_FUNCS_CPP "${CMAKE_SOURCE_DIR}/Common/M5-6/maths_funcs.cpp")
+set(GL_UTILS_CPP "${CMAKE_SOURCE_DIR}/Common/gl_utils.cpp")
+set(STB_IMAGE_CPP "${CMAKE_SOURCE_DIR}/src/ExemplosMoodle/M5_Material/stb_image.cpp")
 
 # Verifica se os arquivos da GLAD estão no lugar
 if (NOT EXISTS ${GLAD_C_FILE})
@@ -77,7 +77,7 @@ foreach(EXERCISE ${EXERCISES})
     get_filename_component(EXE_NAME ${EXERCISE} NAME)                                                                                                                                       
     
     # Adiciona o executável usando o nome do arquivo como nome do executável
-    add_executable(${EXE_NAME} src/${EXERCISE}.cpp ${GLAD_C_FILE})
+    add_executable(${EXE_NAME} src/${EXERCISE}.cpp ${GLAD_C_FILE} ${MATHS_FUNCS_CPP} ${GL_UTILS_CPP} ${STB_IMAGE_CPP})
 
     # Configura as bibliotecas e include dirs para o executável
     target_include_directories(${EXE_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/include/glad ${glm_SOURCE_DIR} ${stb_image_SOURCE_DIR})
