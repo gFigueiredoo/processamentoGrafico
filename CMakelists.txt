@@ -49,8 +49,7 @@ set(EXERCISES
     Entregas/M3/M3JogoCores
     Entregas/M4/Sprite
     EntregasVivenciais/Vivencial1
-    EntregasVivenciais/Vivencial2
-
+    EntregasVivenciais/vivencialm4/Vivencial2
 )
 
 add_compile_options(-Wno-pragmas)
@@ -68,6 +67,9 @@ endif()
 
 # Caminho esperado para a GLAD
 set(GLAD_C_FILE "${CMAKE_SOURCE_DIR}/common/glad.c")
+set(MATHS_FUNCS_CPP "${CMAKE_SOURCE_DIR}/Common/M5-6/maths_funcs.cpp")
+set(GL_UTILS_CPP "${CMAKE_SOURCE_DIR}/Common/gl_utils.cpp")
+set(STB_IMAGE_CPP "${CMAKE_SOURCE_DIR}/src/ExemplosMoodle/M5_Material/stb_image.cpp")
 
 # Verifica se os arquivos da GLAD estão no lugar
 if (NOT EXISTS ${GLAD_C_FILE})

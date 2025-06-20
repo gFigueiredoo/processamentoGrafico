@@ -21,6 +21,11 @@
 #define GL_LOG_FILE "gl.log"
 #define MAX_SHADER_LENGTH 262144
 
+/*------------------------------GLOBAL VARIABLES------------------------------*/
+int g_gl_width = 800;
+int g_gl_height = 600;
+GLFWwindow* g_window = NULL;
+
 /*--------------------------------LOG FUNCTIONS-------------------------------*/
 bool restart_gl_log () {
 	FILE* file = fopen (GL_LOG_FILE, "w");
@@ -118,7 +123,7 @@ bool start_gl () {
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
 		std::cerr << "Falha ao inicializar GLAD" << std::endl;
-		return -1;
+		return false;
 	}
 
 	// get version info
@@ -225,8 +230,8 @@ void print_programme_info_log (GLuint sp) {
 	int actual_length = 0;
 	char log[2048];
 	glGetProgramInfoLog (sp, max_length, &actual_length, log);
-	printf ("program info log for GL index %u:\n%s", sp, log);
-	gl_log ("program info log for GL index %u:\n%s", sp, log);
+	printf ("program info log for GL index %u:\n%s\n", sp, log);
+	gl_log ("program info log for GL index %u:\n%s\n", sp, log);
 }
 
 bool is_programme_valid (GLuint sp) {
