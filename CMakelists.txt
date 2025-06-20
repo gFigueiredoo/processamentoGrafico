@@ -44,10 +44,13 @@ include_directories(${glm_SOURCE_DIR})
 
 # Lista de exemplos/exercícios podem ser colocados aqui também
 set(EXERCISES
+    Entregas/M2/ex1
+    Entregas/M2/ex2
+    Entregas/M3/M3JogoCores
+    Entregas/M4/Sprite
     EntregasVivenciais/Vivencial1
-    Modulo2/Ex1Parte1M2
-    Modulo3/M3JogoCores.cpp
-    Modulo4/Sprite.cpp
+    EntregasVivenciais/Vivencial2
+
 )
 
 add_compile_options(-Wno-pragmas)
@@ -73,13 +76,8 @@ endif()
 
 # Cria os executáveis
 foreach(EXERCISE ${EXERCISES})
-    # Extrai o nome do arquivo sem o diretório para o executável
-    get_filename_component(EXE_NAME ${EXERCISE} NAME)                                                                                                                                       
-    
-    # Adiciona o executável usando o nome do arquivo como nome do executável
+    get_filename_component(EXE_NAME ${EXERCISE} NAME)
     add_executable(${EXE_NAME} src/${EXERCISE}.cpp ${GLAD_C_FILE})
-
-    # Configura as bibliotecas e include dirs para o executável
     target_include_directories(${EXE_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/include/glad ${glm_SOURCE_DIR} ${stb_image_SOURCE_DIR})
     target_link_libraries(${EXE_NAME} glfw ${OPENGL_LIBS} glm::glm)
 endforeach()
