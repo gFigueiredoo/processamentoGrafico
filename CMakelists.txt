@@ -46,6 +46,8 @@ include_directories(${glm_SOURCE_DIR})
 set(EXERCISES
     Entregas/M2/ex1
     Entregas/M2/ex2
+    Entregas/M3/cores
+    Entregas/M4/Sprite
     EntregasVivenciais/Vivencial1
     EntregasVivenciais/vivencialm4/Vivencial2
 )
