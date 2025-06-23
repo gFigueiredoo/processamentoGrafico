@@ -39,3 +39,26 @@ Este projeto implementa um cenário com Parallax Scrolling utilizando OpenGL, on
 
 ![alt text](images/viv2.png)
 
+
+# Atividade vivencial 3:
+- Gabriel Figueiredo, Conrado Maia
+
+
+Este projeto implementa um **mapa de tiles isométricos** utilizando **OpenGL** e a técnica **Diamond Isometric**. Ele permite a navegação por um cursor em 8 direções e exibe tiles de um *tileset*.
+
+1.  **Renderização Isométrica**: Os tiles são desenhados em projeção isométrica "Diamond", onde a profundidade é determinada pela soma da linha e da coluna do grid, garantindo a ordem correta de renderização (Z-sorting).
+2.  **Navegação do Cursor**: Um cursor é exibido sobre o tile atualmente selecionado no grid. Ele pode ser movido em 8 direções (N, S, L, O, NE, NO, SE, SO) utilizando as teclas **WASD** e **QEZC**, respectivamente.
+3.  **Seleção de Tiles**: O mapa de tiles é carregado a partir de uma matriz pré-definida, e cada tile é renderizado com a porção correspondente do *tileset*. O tile do cursor tem um ID específico para se destacar.
+4.  **Coordenadas de Textura (UVs)**: As coordenadas UV de cada tile são calculadas dinamicamente no shader, permitindo que diferentes tiles do mesmo *tileset* sejam exibidos a partir de um único quad.
+5.  **Projeção Ortográfica**: A cena é renderizada usando uma projeção ortográfica com as dimensões da janela (800x600 unidades), apropriada para gráficos 2D.
+
+
+## Entrega
+
+- `AtividadeVivencial3.cpp`: Código-fonte principal
+- `vertex_shader.glsl`: Shader de vértice
+- `fragment_shader.glsl`: Shader de fragmento
+
+
+![alt text](images/viv3.png)
+

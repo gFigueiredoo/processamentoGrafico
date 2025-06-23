@@ -51,6 +51,7 @@ set(EXERCISES
     Entregas/M5/Sprite2
     EntregasVivenciais/Vivencial1
     EntregasVivenciais/vivencialm4/Vivencial2
+    EntregasVivenciais/vivencial3/AtividadeVivencial3
 )
 
 add_compile_options(-Wno-pragmas)
@@ -76,6 +77,9 @@ set(STB_IMAGE_CPP "${CMAKE_SOURCE_DIR}/src/ExemplosMoodle/M5_Material/stb_image.
 if (NOT EXISTS ${GLAD_C_FILE})
     message(FATAL_ERROR "Arquivo glad.c não encontrado! Baixe a GLAD manualmente em https://glad.dav1d.de/ e coloque glad.h em include/glad/ e glad.c em common/")
 endif()
+
+
+file(COPY "${CMAKE_SOURCE_DIR}/assets" DESTINATION "${CMAKE_BINARY_DIR}")
 
 # Cria os executáveis
 foreach(EXERCISE ${EXERCISES})
