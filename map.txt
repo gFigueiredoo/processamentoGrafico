@@ -1,0 +1,21 @@
+# Linha do Tileset: <caminho_tileset> <num_cols_tileset> <num_rows_tileset> <largura_tile> <altura_tile>
+tileset_info: assets/tilesets/tilesetIso.png 7 1 128 64
+# Dimensoes do mapa: <num_linhas_mapa> <num_colunas_mapa>
+map_dimensions: 15 15
+# Dados do mapa (um caractere por tile, sem espacos):
+map_data:
+111111111111111
+144444444444441
+141111111111141
+141444444444141
+141411111114141
+141414444414141
+141414111414141
+141414141414141
+141414111414141
+141414444414141
+141411111114141
+141444444444141
+141111111111141
+144444444444441
+111111111111111
