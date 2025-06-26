@@ -1,3 +1,6 @@
+#define STB_IMAGE_IMPLEMENTATION
+
+
 #include <iostream>
 #include <vector>
 
@@ -8,8 +11,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "gl_utils.h"
-
+#include <gl_utils.h>
 #include <stb_image.h>
 
 const unsigned int SCR_WIDTH = 800;
@@ -200,18 +202,15 @@ void createShaders() {
     unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
     glCompileShader(vertexShader);
-    checkShaderErrors(vertexShader, "VERTEX");
 
     unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
     glCompileShader(fragmentShader);
-    checkShaderErrors(fragmentShader, "FRAGMENT");
 
     shaderProgram = glCreateProgram();
     glAttachShader(shaderProgram, vertexShader);
     glAttachShader(shaderProgram, fragmentShader);
     glLinkProgram(shaderProgram);
-    checkShaderErrors(shaderProgram, "PROGRAM");
 
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
