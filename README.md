@@ -62,3 +62,50 @@ Este projeto implementa um **mapa de tiles isométricos** utilizando **OpenGL** 
 
 ![alt text](images/viv3.png)
 
+
+# Trabalho GB:
+- Gabriel Figueiredo, Conrado Maia
+
+
+Este projeto implementa um protótipo de jogo com um mapa de tiles isométricos do tipo "Diamond", onde um personagem animado pode interagir com o ambiente, coletar itens e enfrentar obstáculos, com condições de vitória e derrota visualmente dinâmicas.
+
+Renderização Isométrica Dinâmica: O mapa é renderizado em projeção isométrica "Diamond", com profundidade (Z-sorting) automática. A escala do jogo e o posicionamento do mapa na tela são ajustáveis.
+
+Mapa Personalizável via Arquivo: O layout do mapa, incluindo tipos de terreno, moedas, paredes e pontos de início, é carregado dinamicamente a partir de um arquivo map.txt customizado.
+
+Personagem Animado e Controlável: Um personagem principal, representado por um sprite sheet, pode ser controlado via teclado (WASD para cardinais, QEZC para diagonais) e possui animações para cada direção de movimento.
+
+Interação com Elementos do Mapa:
+
+Chão (1): Áreas caminháveis.
+
+Parede (2): Áreas não caminháveis que bloqueiam o movimento.
+
+Moeda (0): Itens coletáveis. Coletar todas as moedas leva à vitória.
+
+Lava (3): Áreas não caminháveis que causam "Game Over" ao pisar.
+
+Água (5): Áreas não caminháveis que bloqueiam o movimento.
+
+Tile de Início (4): Define a posição inicial do personagem no mapa.
+
+Condições de Fim de Jogo:
+
+Vitória: Atingida ao coletar todas as moedas presentes no mapa. Ao vencer, todos os tiles do mapa mudam para uma cor de vitória (6).
+
+Derrota: Atingida ao pisar em um tile de lava. Ao perder, todos os tiles do mapa mudam para a cor da lava (3).
+
+Posicionamento Preciso de Sprites: O personagem é renderizado com ajustes finos de posicionamento para garantir que ele esteja visualmente alinhado sobre o centro dos tiles isométricos.
+
+## Entrega
+
+- `GB.cpp`: Código-fonte principal
+- `map.txt`: Arquivo de configuração do mapa, especificando o layout do terreno e a localização de moedas, paredes, lava, água e o ponto de início.
+- `tilesetIso.png`: Imagem do conjunto de tiles para a renderização do mapa e dos objetos
+- `Slime1_Idle_full.png`: Sprite sheet do personagem animado
+
+![alt text](images/gb.png)
+
+![alt text](images/gb-1.png)
+
+![alt text](images/gb-2.png)

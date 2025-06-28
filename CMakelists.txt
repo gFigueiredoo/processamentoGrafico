@@ -52,7 +52,7 @@ set(EXERCISES
     EntregasVivenciais/Vivencial1
     EntregasVivenciais/vivencialm4/Vivencial2
     EntregasVivenciais/vivencial3/AtividadeVivencial3
-    EntregasVivenciais/GB
+    EntregasVivenciais/TrabalhoGB/GB
 )
 
 add_compile_options(-Wno-pragmas)
@@ -81,8 +81,7 @@ endif()
 
 
 file(COPY "${CMAKE_SOURCE_DIR}/assets" DESTINATION "${CMAKE_BINARY_DIR}")
-file(COPY "${CMAKE_SOURCE_DIR}/map.txt" DESTINATION "${CMAKE_BINARY_DIR}")
-file(COPY "${CMAKE_SOURCE_DIR}/walkable.txt" DESTINATION "${CMAKE_BINARY_DIR}")
+file(COPY "${CMAKE_SOURCE_DIR}/src/EntregasVivenciais/TrabalhoGB/map.txt" DESTINATION "${CMAKE_BINARY_DIR}")
 
 # Cria os executáveis
 foreach(EXERCISE ${EXERCISES})
