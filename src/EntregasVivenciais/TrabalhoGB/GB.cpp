@@ -29,6 +29,7 @@ std::string TILESET_PATH;
 float GAME_SCALE = 2.0f;
 
 std::vector<std::vector<int>> game_map;
+std::vector<std::vector<int>> initial_game_map; 
 
 int MAP_ROWS = 0;
 int MAP_COLS = 0;
@@ -95,6 +96,7 @@ bool loadTexture(const char* path);
 bool loadMapConfig(const std::string& filename);
 glm::vec2 gridToIsometric(int col, int row);
 void renderMap();
+void resetGame(); 
 
 enum class AnimationType {
     IDLE_FRONT = 0,
@@ -247,7 +249,7 @@ void GameCharacter::draw(const glm::mat4& projection, glm::vec2 (*gridToIsometri
 
     glm::mat4 model = glm::mat4(1.0f);
     float adjustedX = screen_pos.x - (displayScale.x / 2.0f) + (TILE_WIDTH / 2.0f);
-    float adjustedY = screen_pos.y + (TILE_HEIGHT / 2.0f) - displayScale.y + (TILE_HEIGHT / 2.0f);
+    float adjustedY = screen_pos.y - displayScale.y + (TILE_HEIGHT / 2.0f) + TILE_HEIGHT;
 
 
     model = glm::translate(model, glm::vec3(adjustedX, adjustedY, 0.02f));
@@ -361,14 +363,60 @@ void GameCharacter::calculateCurrentFrameUVs() {
     currentFrameUVs = glm::vec4(u_min, v_min, u_max, v_max);
 }
 
-
 GameCharacter* player_char = nullptr;
 
+void resetGame() {
+    items_collected = 0;
+    game_over = false;
+    game_won = false;
+    game_ended_by_lava = false;
+    effect_applied = false;
+
+    if (!loadMapConfig("map.txt")) {
+        std::cerr << "Erro ao recarregar o mapa durante o reset!" << std::endl;
+        return; 
+    }
+
+    TILE_WIDTH = static_cast<int>(64 * GAME_SCALE); 
+    TILE_HEIGHT = static_cast<int>(32 * GAME_SCALE);
+
+    total_coins_on_map = 0;
+    int initial_player_row = -1;
+    int initial_player_col = -1;
+
+    for (int r = 0; r < MAP_ROWS; ++r) {
+        for (int c = 0; c < MAP_COLS; ++c) {
+            if (game_map[r][c] == TILE_MOEDA) {
+                total_coins_on_map++;
+            }
+            if (game_map[r][c] == TILE_INICIO) {
+                if (initial_player_row == -1) {
+                    initial_player_row = r;
+                    initial_player_col = c;
+                }
+            }
+        }
+    }
+    std::cout << "Total de moedas no mapa (reset): " << total_coins_on_map << std::endl;
+
+    if (player_char) {
+        if (initial_player_row != -1 && initial_player_col != -1) {
+            player_char->setGridPosition(initial_player_row, initial_player_col);
+        } else {
+            player_char->setGridPosition(0, 0); 
+        }
+        player_char->setAnimationType(AnimationType::IDLE_FRONT); 
+    }
+    std::cout << "Jogo resetado!" << std::endl;
+}
 
 int main() {
     std::cout << "---- Jogo Iniciado ----" << std::endl;
 
     if (!loadMapConfig("map.txt")) return -1;
+
+    int initial_tile_width = TILE_WIDTH; 
+    int initial_tile_height = TILE_HEIGHT;
 
     TILE_WIDTH = static_cast<int>(TILE_WIDTH * GAME_SCALE);
     TILE_HEIGHT = static_cast<int>(TILE_HEIGHT * GAME_SCALE);
@@ -454,7 +502,7 @@ int main() {
     }
     player_char->setAnimationFPS(10.0f);
 
-    std::cout << "Controles: W/S/A/D para mover, Q/E/Z/C para diagonais, ESC para sair." << std::endl;
+    std::cout << "Controles: W/S/A/D para mover, Q/E/Z/C para diagonais, ESC para sair. R para resetar." << std::endl;
 
     double lastFrameTime = glfwGetTime();
 
@@ -520,7 +568,7 @@ GLuint compile_shader(const char* source, GLenum type) {
     glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
     if (!success) {
         glGetShaderInfoLog(shader, 512, NULL, infoLog);
-        std::cerr << "ERROR::SHADER::COMPILATION_FAILED of type " << type << "\n" << infoLog << std::endl;
+        std::cerr << "ERROR::SHADER::COMPILATION_FAILED\n" << infoLog << std::endl;
     }
     return shader;
 }
@@ -533,41 +581,58 @@ bool loadMapConfig(const std::string& filename) {
     }
 
     std::string line;
-    while (std::getline(file, line)) {
-        if (line.empty() || line[0] == '#') continue;
+    std::string temp_tileset_path;
+    int temp_tileset_cols, temp_tileset_rows, temp_tile_width, temp_tile_height;
+    int temp_map_rows, temp_map_cols;
 
-        std::istringstream iss(line);
-        std::string key;
-        iss >> key;
+    std::getline(file, line); 
+    std::istringstream iss_tileset(line);
+    std::string key_tileset;
+    iss_tileset >> key_tileset >> temp_tileset_path >> temp_tileset_cols >> temp_tileset_rows >> temp_tile_width >> temp_tile_height;
 
-        if (key == "tileset_info:") {
-            iss >> TILESET_PATH >> TILESET_COLS >> TILESET_ROWS >> TILE_WIDTH >> TILE_HEIGHT;
-        } else if (key == "map_dimensions:") {
-            iss >> MAP_ROWS >> MAP_COLS;
-            game_map.resize(MAP_ROWS, std::vector<int>(MAP_COLS));
-        } else if (key == "map_data:") {
-            for (int r = 0; r < MAP_ROWS; ++r) {
-                std::string row_str;
-                if (!std::getline(file, row_str)) {
-                    std::cerr << "Dados do mapa incompletos." << std::endl;
-                    return false;
-                }
-                size_t first = row_str.find_first_not_of(" \t\n\r");
-                size_t last = row_str.find_last_not_of(" \t\n\r");
-                if (std::string::npos != first) {
-                    row_str = row_str.substr(first, (last - first + 1));
-                } else {
-                    row_str = "";
-                }
+    std::getline(file, line); 
+    std::istringstream iss_dim(line);
+    std::string key_dim;
+    iss_dim >> key_dim >> temp_map_rows >> temp_map_cols;
 
-                if ((int)row_str.length() != MAP_COLS) {
-                    std::cerr << "Largura da linha do mapa incorreta. Esperado " << MAP_COLS << ", obtido " << row_str.length() << " na linha: \"" << row_str << "\"" << std::endl;
-                    return false;
-                }
-                for (int c = 0; c < MAP_COLS; ++c) {
-                    game_map[r][c] = row_str[c] - '0';
-                }
-            }
+    if (MAP_ROWS == 0 || MAP_COLS == 0) {
+        MAP_ROWS = temp_map_rows;
+        MAP_COLS = temp_map_cols;
+        TILE_WIDTH = temp_tile_width;
+        TILE_HEIGHT = temp_tile_height;
+        TILESET_COLS = temp_tileset_cols;
+        TILESET_ROWS = temp_tileset_rows;
+        TILESET_PATH = temp_tileset_path;
+    }
+
+
+    std::getline(file, line); 
+
+    game_map.clear(); 
+    game_map.resize(MAP_ROWS, std::vector<int>(MAP_COLS));
+
+    for (int r = 0; r < MAP_ROWS; ++r) {
+        std::string row_str;
+        if (!std::getline(file, row_str)) {
+            std::cerr << "Dados do mapa incompletos durante recarregamento." << std::endl;
+            file.close();
+            return false;
+        }
+        size_t first = row_str.find_first_not_of(" \t\n\r");
+        size_t last = row_str.find_last_not_of(" \t\n\r");
+        if (std::string::npos != first) {
+            row_str = row_str.substr(first, (last - first + 1));
+        } else {
+            row_str = "";
+        }
+
+        if ((int)row_str.length() != MAP_COLS) {
+            std::cerr << "Largura da linha do mapa incorreta durante recarregamento. Esperado " << MAP_COLS << ", obtido " << row_str.length() << " na linha: \"" << row_str << "\"" << std::endl;
+            file.close();
+            return false;
+        }
+        for (int c = 0; c < MAP_COLS; ++c) {
+            game_map[r][c] = row_str[c] - '0';
         }
     }
     file.close();
@@ -695,6 +760,12 @@ void processInput(GLFWwindow* window) {
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
     if (action != GLFW_PRESS && action != GLFW_REPEAT) return;
+    
+    if (key == GLFW_KEY_R) { 
+        resetGame();
+        return;
+    }
+
     if (game_over || game_won) return;
     if (!player_char) return;
 
